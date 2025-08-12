@@ -70,7 +70,16 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
         result_face = face_mesh.process(rgb)
         result_hands = hands.process(rgb)
 
-        # Draw face landmarks
+        # Face landmarks processing
         if result_face.multi_face_landmarks:
-            for face_landmarks in result_face.multi_face_landmarks:
-                mp_drawing.draw_landmarks(frame, face_landmarks)
+            landmarks = result_face.multi_face_landmarks[0].landmark
+
+        # Blink detection
+            EAR_LEFT = eye_aspect_ratio(landmarks, [33, 160, 158, 133, 153, 144])
+            EAR_RIGHT = eye_aspect_ratio(landmarks, [263, 387, 385, 362, 380, 373])
+            EAR_THRESH = 0.22
+
+            if EAR_LEFT < EAR_THRESH and EAR_RIGHT < EAR_THRESH:
+                if time.time() - blink_start > 0.2:
+                    blink_count += 1
+                    blink_start = time.time()
