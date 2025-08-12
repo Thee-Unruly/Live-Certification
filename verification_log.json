@@ -4,5 +4,201 @@
     "challenge": "wave",
     "passed": false,
     "reason": "timeout"
+  },
+  {
+    "timestamp": "2025-08-12T12:52:37.535345Z",
+    "passed": false,
+    "reason": "timeout",
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T12:54:25.868531Z",
+    "passed": false,
+    "reason": "timeout",
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T12:56:19.318942Z",
+    "passed": false,
+    "reason": "timeout",
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:13:05.318469Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:13:33.269163Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:14:32.311858Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:14:58.871732Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:15:09.358843Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:16:46.850112Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:17:14.224930Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:39:34.399735Z",
+    "challenge": "wave",
+    "passed": false,
+    "reason": "timeout"
+  },
+  {
+    "timestamp": "2025-08-12T13:40:18.220221Z",
+    "challenge": "blink",
+    "passed": false,
+    "reason": "timeout"
+  },
+  {
+    "timestamp": "2025-08-12T13:44:18.957988Z",
+    "passed": true,
+    "reason": "any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0
+  },
+  {
+    "timestamp": "2025-08-12T13:59:23.635402Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:00:12.563454Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:00:43.579639Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": false,
+    "smile_ok": false,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": false
+  },
+  {
+    "timestamp": "2025-08-12T14:01:57.045015Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:02:40.765559Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:03:22.832716Z",
+    "passed": true,
+    "reason": "hand_wave_and_any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0,
+    "hand_wave_ok": true,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:04:26.773807Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": false,
+    "background_ok": false
+  },
+  {
+    "timestamp": "2025-08-12T14:05:11.762960Z",
+    "passed": false,
+    "reason": "timeout",
+    "live_ok": true,
+    "smile_ok": true,
+    "blink_count": 0,
+    "hand_wave_ok": false,
+    "micro_movement_ok": true,
+    "background_ok": true
+  },
+  {
+    "timestamp": "2025-08-12T14:05:24.958377Z",
+    "passed": true,
+    "reason": "hand_wave_and_any_condition_verified",
+    "live_ok": true,
+    "smile_ok": false,
+    "blink_count": 0,
+    "hand_wave_ok": true,
+    "micro_movement_ok": true,
+    "background_ok": true
   }
 ]
