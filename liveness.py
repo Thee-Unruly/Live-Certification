@@ -30,4 +30,11 @@ mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
 
+# Challenge list
+CHALLENGES = ["blink", "smile", "wave"]
+selected_challenge = random.choice(CHALLENGES)
+print(f"Your challenge: Please {selected_challenge}!")
+
 # Initialize video capture
+cap = cv2.VideoCapture(0)
+
