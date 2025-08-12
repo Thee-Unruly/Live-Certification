@@ -74,7 +74,7 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
         if result_face.multi_face_landmarks:
             landmarks = result_face.multi_face_landmarks[0].landmark
 
-        # Blink detection
+            # Blink detection
             EAR_LEFT = eye_aspect_ratio(landmarks, [33, 160, 158, 133, 153, 144])
             EAR_RIGHT = eye_aspect_ratio(landmarks, [263, 387, 385, 362, 380, 373])
             EAR_THRESH = 0.22
@@ -84,7 +84,7 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
                     blink_count += 1
                     blink_start = time.time()
 
-        # Smile detection (simple version: mouth width > height ratio)
+            # Smile detection (simple version: mouth width > height ratio)
             mouth_width = np.linalg.norm(
                 np.array([landmarks[61].x, landmarks[61].y]) - 
                 np.array([landmarks[291].x, landmarks[291].y])
@@ -95,3 +95,15 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
             )
             if mouth_width / mouth_height > 1.8:
                 smile_detected = True
+
+        # Hand detection for wave
+        if result_hands.multi_hand_landmarks:
+            for hand_landmarks in result_hands.multi_hand_landmarks:
+                mp_drawing.draw_landmarks(frame, hand_landmarks)
+                x_pos = hand_landmarks.landmark[0].x  # Wrist x position
+                wave_positions.append(x_pos)
+                if len(wave_positions) > 5:
+                    movement = max(wave_positions) - min(wave_positions)
+                    if movement > 0.15:
+                        wave_detected = True
+                    wave_positions.pop(0)
