@@ -60,3 +60,17 @@ smile_detected = False
 wave_detected = False
 wave_positions = []
 
+with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num_hands=1) as hands:
+    while cap.isOpened():
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        result_face = face_mesh.process(rgb)
+        result_hands = hands.process(rgb)
+
+        # Draw face landmarks
+        if result_face.multi_face_landmarks:
+            for face_landmarks in result_face.multi_face_landmarks:
+                mp_drawing.draw_landmarks(frame, face_landmarks)
