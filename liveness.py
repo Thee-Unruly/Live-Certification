@@ -136,3 +136,14 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
 
 cap.release()
 cv2.destroyAllWindows()
+
+#How It Works
+# 1. Random challenge is chosen at the start (blink, smile, or wave).
+
+# 2. Blink detection → Calculates eye aspect ratio (EAR) from facial landmarks.
+
+# 3. Smile detection → Checks mouth width-to-height ratio.
+
+# 4. Wave detection → Tracks wrist x-position movement.
+
+# 5. When the requested action is detected, it confirms liveness and stops.
