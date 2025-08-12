@@ -83,3 +83,15 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
                 if time.time() - blink_start > 0.2:
                     blink_count += 1
                     blink_start = time.time()
+
+        # Smile detection (simple version: mouth width > height ratio)
+            mouth_width = np.linalg.norm(
+                np.array([landmarks[61].x, landmarks[61].y]) - 
+                np.array([landmarks[291].x, landmarks[291].y])
+            )
+            mouth_height = np.linalg.norm(
+                np.array([landmarks[13].x, landmarks[13].y]) - 
+                np.array([landmarks[14].x, landmarks[14].y])
+            )
+            if mouth_width / mouth_height > 1.8:
+                smile_detected = True
