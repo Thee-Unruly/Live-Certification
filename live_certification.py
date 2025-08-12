@@ -35,7 +35,7 @@ BLINK_INTERVAL = 0.2      # minimum seconds between registered blinks
 WAVE_MOVEMENT_THRESH = 0.15
 SMILE_RATIO_THRESH = 1.8  # mouth width / height ratio threshold
 ANTI_SPOOF_FRAMES_REQUIRED = 4  # number of frames texture-check must pass
-CAPTURE_TIMEOUT = 12      # seconds to wait for challenge success
+CAPTURE_TIMEOUT = 20    # seconds to wait for challenge success
 
 LOG_FILE = "verification_log.json"
 
