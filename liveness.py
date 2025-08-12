@@ -25,10 +25,16 @@ import random
 import time
 import numpy as np
 
-# Initialize MediaPipe Face Mesh and Drawing utilities
+import cv2
+import mediapipe as mp
+import random
+import time
+import numpy as np
+
+# Mediapipe setup
 mp_face_mesh = mp.solutions.face_mesh
-mp_drawing = mp.solutions.drawing_utils
 mp_hands = mp.solutions.hands
+mp_drawing = mp.solutions.drawing_utils
 
 # Challenge list
 CHALLENGES = ["blink", "smile", "wave"]
@@ -51,7 +57,7 @@ def eye_aspect_ratio(landmarks, eye_indices):
     
     return (vertical_1 + vertical_2) / (2.0 * horizontal)
 
-# Initialize video capture
+# Video capture
 cap = cv2.VideoCapture(0)
 
 blink_count = 0
@@ -107,3 +113,26 @@ with mp_face_mesh.FaceMesh(max_num_faces=1) as face_mesh, mp_hands.Hands(max_num
                     if movement > 0.15:
                         wave_detected = True
                     wave_positions.pop(0)
+
+        # Display
+        cv2.putText(frame, f"Challenge: {selected_challenge}", (30, 30),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+        cv2.imshow("Liveness Detection", frame)
+
+        # Exit condition
+        if cv2.waitKey(1) & 0xFF == 27:
+            break
+
+        # Check if challenge passed
+        if selected_challenge == "blink" and blink_count >= 2:
+            print("Blink challenge passed ✅")
+            break
+        elif selected_challenge == "smile" and smile_detected:
+            print("Smile challenge passed ✅")
+            break
+        elif selected_challenge == "wave" and wave_detected:
+            print("Wave challenge passed ✅")
+            break
+
+cap.release()
+cv2.destroyAllWindows()
