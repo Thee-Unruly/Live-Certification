@@ -51,3 +51,12 @@ def eye_aspect_ratio(landmarks, eye_indices):
     
     return (vertical_1 + vertical_2) / (2.0 * horizontal)
 
+# Initialize video capture
+cap = cv2.VideoCapture(0)
+
+blink_count = 0
+blink_start = time.time()
+smile_detected = False
+wave_detected = False
+wave_positions = []
+
