@@ -26,4 +26,28 @@ while True:
     # Convert BGR to RGB
     rgb_frame = frame[:, :, ::-1]
 
-    
+    # Find faces in the frame
+    face_locations = face_recognition.face_locations(rgb_frame)
+    face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
+
+    for face_encoding, face_location in zip(face_encodings, face_locations):
+        # Check if the face is a match for any known faces
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+        name = "Unknown"
+
+        # Use the known face with the largest distance to the new face
+        if True in matches:
+            first_match_index = matches.index(True)
+            name = known_face_names[first_match_index]
+
+        # Draw a box around the face
+        top, right, bottom, left = face_location
+        cv2.rectangle(frame, (left, top), (right, bottom), (0, 255, 0), 2)
+        cv2.putText(frame, name, (left, top - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 255, 0), 2)
+
+    cv2.imshow("Video", frame)
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+video_capture.release()
+cv2.destroyAllWindows()
