@@ -22,3 +22,8 @@ while True:
     ret, frame = video_capture.read()
     if not ret:
         break
+
+    # Convert BGR to RGB
+    rgb_frame = frame[:, :, ::-1]
+
+    
