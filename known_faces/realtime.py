@@ -51,3 +51,11 @@ while True:
 
 video_capture.release()
 cv2.destroyAllWindows()
+
+# How this works
+
+# 1. Encoding known faces: face_recognition.face_encodings() creates a 128-d vector for each face in your dataset.
+
+# 2. Real-time matching: For each frame, the script detects faces, encodes them, and compares them to your stored encodings using compare_faces.
+
+# 3. Tolerance: Lowering the tolerance (< 0.6) makes matching stricter, raising it makes it more lenient.
