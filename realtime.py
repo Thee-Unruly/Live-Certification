@@ -2,74 +2,66 @@ import face_recognition
 import os
 import cv2
 import numpy as np
-from PIL import Image
 
 def debug_image_properties(image, name):
-    """Helper function to debug image properties"""
     print(f"\n[DEBUG] {name} properties:")
     print(f"Type: {type(image)}")
     if hasattr(image, 'shape'): print(f"Shape: {image.shape}")
     if hasattr(image, 'dtype'): print(f"Data type: {image.dtype}")
-    if hasattr(image, 'mode'): print(f"Mode: {image.mode}")
-    print(f"Min value: {np.min(image)}")
-    print(f"Max value: {np.max(image)}")
+    print(f"Min value: {np.min(image) if hasattr(image, 'shape') else 'N/A'}")
+    print(f"Max value: {np.max(image) if hasattr(image, 'shape') else 'N/A'}")
 
 # ---------------------------
-# Load known faces with enhanced debugging
+# Load known faces
 # ---------------------------
 known_face_encodings = []
 known_face_names = []
 known_faces_dir = "known_faces"
 
-for filename in [f for f in os.listdir(known_faces_dir) if f.lower().endswith('.jpg')]:
+if not os.path.exists(known_faces_dir):
+    print(f"[CRITICAL ERROR] Directory {known_faces_dir} does not exist")
+    exit()
+
+for filename in [f for f in os.listdir(known_faces_dir) if f.lower().endswith(('.jpg', '.png'))]:
     path = os.path.join(known_faces_dir, filename)
     
     try:
         print(f"\n=== Processing {filename} ===")
         
-        # Method 1: Load with PIL first
-        pil_image = Image.open(path)
-        debug_image_properties(pil_image, "PIL Image")
-        
-        # Convert to RGB if needed
-        if pil_image.mode != 'RGB':
-            print(f"Converting from {pil_image.mode} to RGB")
-            pil_image = pil_image.convert('RGB')
-        
-        pil_array = np.array(pil_image)
-        debug_image_properties(pil_array, "PIL Array")
-        
-        # Method 2: Load with OpenCV
+        # Load with OpenCV
         cv_image = cv2.imread(path)
         if cv_image is None:
             raise ValueError("OpenCV couldn't read image")
         
-        cv_rgb = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
-        debug_image_properties(cv_rgb, "OpenCV RGB")
+        debug_image_properties(cv_image, "OpenCV Image")
         
-        # Choose which image to use (prioritize PIL)
-        working_image = pil_array
+        # Convert to RGB
+        rgb_image = cv2.cvtColor(cv_image, cv2.COLOR_BGR2RGB)
+        rgb_image = np.ascontiguousarray(rgb_image)  # Ensure contiguous memory
+        debug_image_properties(rgb_image, "RGB Image")
         
-        # Double-check array properties
-        if working_image.dtype != np.uint8:
+        # Ensure uint8
+        if rgb_image.dtype != np.uint8:
             print("Converting to uint8")
-            working_image = working_image.astype(np.uint8)
+            rgb_image = rgb_image.astype(np.uint8)
         
-        if len(working_image.shape) != 3 or working_image.shape[2] != 3:
-            raise ValueError("Final image must be 3-channel RGB")
+        # Verify image shape
+        if len(rgb_image.shape) != 3 or rgb_image.shape[2] != 3:
+            raise ValueError("Image must be 3-channel RGB")
         
-        debug_image_properties(working_image, "Final Image")
+        debug_image_properties(rgb_image, "Final Image")
         
-        # Try face encodings
+        # Face detection
         print("Attempting face detection...")
-        face_locations = face_recognition.face_locations(working_image)
-        print(f"Found {len(face_locations)} face(s)")
+        face_locations = face_recognition.face_locations(rgb_image, model="hog")
+        print(f"Found {len(face_locations)} face(s): {face_locations}")
         
         if not face_locations:
             raise ValueError("No faces detected")
         
+        # Face encodings
         print("Attempting face encodings...")
-        encodings = face_recognition.face_encodings(working_image, face_locations)
+        encodings = face_recognition.face_encodings(rgb_image, face_locations)
         
         if not encodings:
             raise ValueError("Face detected but encoding failed")
@@ -96,18 +88,23 @@ if not known_face_encodings:
 print("\nStarting webcam...")
 video_capture = cv2.VideoCapture(0)
 
+if not video_capture.isOpened():
+    print("[CRITICAL ERROR] Could not open webcam")
+    exit()
+
 while True:
     ret, frame = video_capture.read()
     if not ret:
+        print("[ERROR] Failed to capture frame")
         break
 
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
-    face_locations = face_recognition.face_locations(rgb_frame)
+    face_locations = face_recognition.face_locations(rgb_frame, model="hog")
     face_encodings = face_recognition.face_encodings(rgb_frame, face_locations)
 
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.6)
         name = "Unknown"
         
         if True in matches:
@@ -123,11 +120,3 @@ while True:
 
 video_capture.release()
 cv2.destroyAllWindows()
-
-# How this works
-
-# 1. Encoding known faces: face_recognition.face_encodings() creates a 128-d vector for each face in your dataset.
-
-# 2. Real-time matching: For each frame, the script detects faces, encodes them, and compares them to your stored encodings using compare_faces.
-
-# 3. Tolerance: Lowering the tolerance (< 0.6) makes matching stricter, raising it makes it more lenient.
