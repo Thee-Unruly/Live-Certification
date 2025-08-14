@@ -1,5 +1,6 @@
 import face_recognition #handles detection + embedding generation
 import os
+import cv2
 
 # Load known faces
 known_face_encodings = []
@@ -14,4 +15,10 @@ for filename in os.listdir("known_faces"):
         name = os.path.splitext(filename)[0]
         known_face_names.append(name)
 
+# Start webcam
+video_capture = cv2.VideoCapture(0)
 
+while True:
+    ret, frame = video_capture.read()
+    if not ret:
+        break
