@@ -18,12 +18,18 @@ def verify_face(user_id, max_attempts=3):
     for img_file in os.listdir(user_folder):
         img_path = os.path.join(user_folder, img_file)
         try:
-            # Read with OpenCV first to ensure proper format
-            img = cv2.imread(img_path)
+            # Read with OpenCV
+            img = cv2.imread(img_path, cv2.IMREAD_COLOR)
             if img is None:
-                raise ValueError("Invalid image file")
+                print(f"⚠️ Skipping {img_file}: Failed to load image")
+                continue
                 
-            # Convert to RGB (what face_recognition expects)
+            # Verify image properties
+            if len(img.shape) != 3 or img.shape[2] != 3:
+                print(f"⚠️ Skipping {img_file}: Invalid image format (Shape: {img.shape})")
+                continue
+                
+            # Convert to RGB
             rgb_img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             
             # Get face encodings
@@ -31,6 +37,9 @@ def verify_face(user_id, max_attempts=3):
             if encodings:
                 known_encodings.append(encodings[0])
                 valid_images += 1
+                print(f"✅ Loaded {img_file} (Shape: {img.shape})")
+            else:
+                print(f"⚠️ Skipping {img_file}: No faces detected")
         except Exception as e:
             print(f"⚠️ Skipping {img_file}: {str(e)}")
             continue
@@ -51,6 +60,7 @@ def verify_face(user_id, max_attempts=3):
     while attempt < max_attempts:
         ret, frame = cap.read()
         if not ret:
+            print("Error: Failed to capture frame")
             break
             
         # Convert to RGB

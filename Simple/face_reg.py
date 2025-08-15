@@ -24,6 +24,12 @@ def register_face(user_id, num_captures=5):
     while count < num_captures:
         ret, frame = cap.read()
         if not ret:
+            print("Error: Failed to capture frame.")
+            break
+            
+        # Verify frame is in correct format
+        if len(frame.shape) != 3 or frame.shape[2] != 3:
+            print(f"Error: Invalid frame format. Shape: {frame.shape}")
             break
             
         # Display countdown
@@ -37,14 +43,24 @@ def register_face(user_id, num_captures=5):
         key = cv2.waitKey(1)
         
         if key == 32:  # SPACE key
-            # Convert to RGB and ensure proper format
+            # Convert to RGB and back to BGR for saving
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            bgr_frame = cv2.cvtColor(rgb_frame, cv2.COLOR_RGB2BGR)
             img_path = f"{user_folder}/{int(time.time())}.jpg"
             
-            # Save as proper JPEG
-            cv2.imwrite(img_path, frame, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
-            print(f"Saved: {img_path}")
-            count += 1
+            # Save as high-quality JPEG
+            success = cv2.imwrite(img_path, bgr_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 95])
+            if success:
+                print(f"Saved: {img_path}")
+                # Verify saved image
+                test_img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+                if test_img is None or len(test_img.shape) != 3 or test_img.shape[2] != 3:
+                    print(f"Error: Saved image {img_path} is invalid. Shape: {test_img.shape if test_img is not None else 'None'}")
+                else:
+                    print(f"Verified: {img_path} is valid (Shape: {test_img.shape})")
+                count += 1
+            else:
+                print(f"Error: Failed to save {img_path}")
             time.sleep(0.5)  # Brief pause
             
         elif key == ord('q'):
